@@ -85,6 +85,14 @@ def train_model(config):
     loss_acc = 0.0
     ema = EMA(model)
 
+    # Load VideoMAE
+    teacher_model = load_model(model_name="vit_small_patch16_224", checkpoint="/home/vixmoai/Desktop/VIXMO/Akmal/VideoMAE-Action-Detection/finetune-small/checkpoint-29.pth", num_frames=16, num_classes=80)
+
+    teacher_model.eval()
+
+    for p in teacher_model.parameters():
+        p.requires_grad = False
+
     while(cur_epoch <= max_epoch):
         cnt_pram_update = 0
         for iteration, (batch_clip, batch_bboxes, batch_labels) in enumerate(dataloader): 
